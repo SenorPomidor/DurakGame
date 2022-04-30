@@ -24,17 +24,17 @@ public class Host extends Player {
                 if (object instanceof Command) {
                     Command request = (Command) object;
 
-                    MakeTurn(request);
+                    makeTurn(request);
                 }
             }
         });
 
-        RegisterClasses(server.getKryo());
+        registerClasses(server.getKryo());
     }
 
     @Override
-    public void MakeTurn(Command command) {
-        gameState = controller.ExecuteTurn(command);
+    public void makeTurn(Command command) {
+        gameState = controller.executeTurn(command);
     }
 
     @Override

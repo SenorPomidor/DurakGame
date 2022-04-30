@@ -11,15 +11,15 @@ public abstract class Player {
         this.playerID = playerID;
     }
 
-    public abstract void MakeTurn(Command command);
+    public abstract void makeTurn(Command command);
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
 
-        view.Draw(gameState);
+        view.draw(gameState);
     }
 
-    void RegisterClasses(Kryo kryo) {
+    void registerClasses(Kryo kryo) {
         kryo.register(Card.class);
         kryo.register(GameState.class);
         kryo.register(Command.class);
