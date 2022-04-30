@@ -7,9 +7,9 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 public class Host extends Player {
-    Controller controller;
+    private Controller controller;
 
-    Server server;
+    private Server server;
 
     public Host(int playerID) throws IOException {
         super(playerID);

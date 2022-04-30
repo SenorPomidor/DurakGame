@@ -1,7 +1,7 @@
 package mirea.sipi.durak.game;
 
 public class Controller {
-    GameState gameState;
+    private GameState gameState;
 
     public GameState executeTurn(Command command) {
         if (command.Verify(gameState))

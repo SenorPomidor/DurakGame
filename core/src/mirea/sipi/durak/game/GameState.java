@@ -8,7 +8,7 @@ public class GameState {
         Card[] defenders;
     }
 
-    ArrayList<Card> deck, discard;
-    ArrayList<Card>[] hands;
-    Table table;
+    private ArrayList<Card> deck, discard;
+    private ArrayList<Card>[] hands;
+    private Table table;
 }

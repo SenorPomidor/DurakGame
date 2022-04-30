@@ -7,7 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import java.io.IOException;
 
 public class PlayerClient extends Player {
-    Client client;
+    private Client client;
 
     public PlayerClient(int playerID) throws IOException {
         super(playerID);

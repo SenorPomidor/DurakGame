@@ -5,8 +5,8 @@ public class Card {
         DIAMONDS, CLUBS, HEARTS, SPADES
     }
 
-    Suit suit;
-    int value;
+    private Suit suit;
+    private int value;
 
     public Card(Suit suit, int value) {
         this.suit = suit;

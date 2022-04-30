@@ -3,9 +3,9 @@ package mirea.sipi.durak.game;
 import com.esotericsoftware.kryo.Kryo;
 
 public abstract class Player {
-    View view;
-    GameState gameState;
-    int playerID;
+    private View view;
+    protected GameState gameState;
+    private int playerID;
 
     public Player(int playerID) {
         this.playerID = playerID;
