@@ -1,7 +1,7 @@
 package mirea.sipi.durak.game;
 
 public abstract class Command {
-    int playerID;
+    private int playerID;
 
     public Command(int playerID) {
         this.playerID = playerID;

@@ -1,12 +1,12 @@
 package mirea.sipi.durak.game;
 
 public class Card {
-    enum Suit {
+    public enum Suit {
         DIAMONDS, CLUBS, HEARTS, SPADES
     }
 
-    Suit suit;
-    int value;
+    private Suit suit;
+    private int value;
 
     public Card(Suit suit, int value) {
         this.suit = suit;

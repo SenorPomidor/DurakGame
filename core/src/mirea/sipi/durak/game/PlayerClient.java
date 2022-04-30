@@ -3,12 +3,11 @@ package mirea.sipi.durak.game;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
 
 import java.io.IOException;
 
 public class PlayerClient extends Player {
-    Client client;
+    private Client client;
 
     public PlayerClient(int playerID) throws IOException {
         super(playerID);
@@ -27,11 +26,11 @@ public class PlayerClient extends Player {
             }
         });
 
-        RegisterClasses(client.getKryo());
+        registerClasses(client.getKryo());
     }
 
     @Override
-    public void MakeTurn(Command command) {
+    public void makeTurn(Command command) {
         client.sendTCP(command);
     }
 }
