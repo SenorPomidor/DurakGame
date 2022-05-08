@@ -9,31 +9,56 @@ public class GameState {
     /**
      * Класс для описания игрового поля
      */
-    private class Table {
+    public class Table {
         /**
          * "Атакующие" карты
          */
-        Card[] attackers;
+        public Card[] attackers;
         /**
          * Карты, которыми отбиваются от атаки
          */
-        Card[] defenders;
+        public Card[] defenders;
     }
 
     /**
      * Игровая колода карт
      */
-    private ArrayList<Card> deck;
+    public ArrayList<Card> deck;
     /**
      * Бита
      */
-    private ArrayList<Card> discard;
+    public ArrayList<Card> discard;
+
     /**
      * Карты в руке каждого из игроков
      */
-    private ArrayList<Card>[] hands;
+    public ArrayList<Card>[] hands;
     /**
      * Разыгранные на поле карты
      */
-    private Table table;
+    public Table table;
+
+    /**
+     * Количество игроков в партии
+     */
+    public int playerCount;
+
+    /**
+     * Масть, являющаяся козырной
+     */
+    public Card.Suit trumpSuit;
+
+    /**
+     * ID атакующего игрока
+     */
+    public int attackerPlayerID = 0;
+    /**
+     * ID обороняющегося игрока
+     */
+    public int defenderPlayerID = 1;
+
+    /**
+     * Статус пасования игроков
+     */
+    public boolean[] playerPass;
 }
