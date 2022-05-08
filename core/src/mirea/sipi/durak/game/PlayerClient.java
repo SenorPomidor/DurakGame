@@ -6,7 +6,13 @@ import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 
+/**
+ * Клиент, участвующий в партии
+ */
 public class PlayerClient extends Player {
+    /**
+     * Клиент для связи с хостом
+     */
     private Client client;
 
     public PlayerClient(int playerID) throws IOException {
@@ -29,6 +35,10 @@ public class PlayerClient extends Player {
         registerClasses(client.getKryo());
     }
 
+    /**
+     * Отправляет команду хосту для дальнейшей передачи контроллеру
+     * @param command Команда, которую необходимо выполнить
+     */
     @Override
     public void makeTurn(Command command) {
         client.sendTCP(command);
