@@ -1,6 +1,10 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.network;
 
 import com.esotericsoftware.kryo.Kryo;
+import mirea.sipi.durak.game.commands.Command;
+import mirea.sipi.durak.game.model.Card;
+import mirea.sipi.durak.game.model.GameState;
+import mirea.sipi.durak.game.view.View;
 
 /**
  * Класс для описания игрока партии

@@ -1,4 +1,8 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.controller;
+
+import mirea.sipi.durak.game.model.Card;
+import mirea.sipi.durak.game.model.GameState;
+import mirea.sipi.durak.game.commands.Command;
 
 /**
  * Контроллер, обрабатывающий поступающие команды

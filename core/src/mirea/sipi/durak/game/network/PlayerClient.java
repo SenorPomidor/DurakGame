@@ -1,8 +1,10 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.network;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import mirea.sipi.durak.game.commands.Command;
+import mirea.sipi.durak.game.model.GameState;
 
 import java.io.IOException;
 

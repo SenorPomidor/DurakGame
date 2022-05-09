@@ -1,4 +1,6 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.view;
+
+import mirea.sipi.durak.game.model.GameState;
 
 /**
  * Класс отображения партии

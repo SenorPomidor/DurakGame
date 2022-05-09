@@ -1,4 +1,4 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.model;
 
 /**
  * Класс игровой карты

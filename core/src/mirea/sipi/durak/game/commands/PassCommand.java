@@ -1,4 +1,7 @@
-package mirea.sipi.durak.game;
+package mirea.sipi.durak.game.commands;
+
+import mirea.sipi.durak.game.controller.Controller;
+import mirea.sipi.durak.game.model.GameState;
 
 /**
  * Команда паса
