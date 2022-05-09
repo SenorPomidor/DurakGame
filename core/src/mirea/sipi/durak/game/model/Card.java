@@ -8,7 +8,17 @@ public class Card {
      * Энмератор масти карты
      */
     public enum Suit {
-        DIAMONDS, CLUBS, HEARTS, SPADES
+        DIAMONDS("d"), CLUBS("c"), HEARTS("h"), SPADES("s");
+
+        private final String shortName;
+
+        public String shortName() {
+            return shortName;
+        }
+
+        Suit(String s) {
+            shortName = s;
+        }
     }
 
     /**
