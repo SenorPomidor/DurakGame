@@ -9,7 +9,7 @@ public class GameState {
     /**
      * Класс для описания игрового поля
      */
-    public class Table {
+    public static class Table {
         /**
          * "Атакующие" карты
          */
