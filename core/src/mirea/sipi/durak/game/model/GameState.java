@@ -61,4 +61,21 @@ public class GameState {
      * Статус пасования игроков
      */
     public boolean[] playerPass;
+
+    /**
+     * Список победивших игроков
+     */
+    public ArrayList<Integer> winners;
+
+    /**
+     * Вспомогательный метод, с помощью которого можно узнать, спасовали ли все игроки
+     * @return
+     */
+    public boolean getAllPass() {
+        for (boolean pass : playerPass) {
+            if (!pass)
+                return false;
+        }
+        return true;
+    }
 }
