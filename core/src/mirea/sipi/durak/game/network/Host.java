@@ -44,6 +44,10 @@ public class Host extends Player {
         registerClasses(server.getKryo());
     }
 
+    public void startGame(int playerCount) {
+        setGameState(new GameState(playerCount));
+    }
+
     /**
      * Выполняет команду хоста или отправленную одним из клиентов
      * @param command Команда, отправленная игроком
