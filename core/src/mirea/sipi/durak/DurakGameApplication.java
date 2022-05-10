@@ -1,13 +1,12 @@
 package mirea.sipi.durak;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class DurakGameApplication extends ApplicationAdapter {
+
 	private SpriteBatch batch;
-	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -19,7 +18,7 @@ public class DurakGameApplication extends ApplicationAdapter {
 		batch.begin();
 		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
