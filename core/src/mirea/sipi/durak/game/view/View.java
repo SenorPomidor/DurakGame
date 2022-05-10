@@ -1,8 +1,10 @@
 package mirea.sipi.durak.game.view;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.ScreenUtils;
 import mirea.sipi.durak.game.model.Card;
 import mirea.sipi.durak.game.model.GameState;
 import mirea.sipi.durak.game.utils.FileUtils;
@@ -25,6 +27,8 @@ public class View {
     private final int windowHeight;
     private final int windowWidth;
 
+    private GameState gameState;
+
     public View(int currentPlayerId) {
         this.windowHeight = Gdx.graphics.getHeight();
         this.windowWidth = Gdx.graphics.getWidth();
@@ -41,6 +45,10 @@ public class View {
      * @param gameState Текущее состояние игры
      */
     public void update(GameState gameState) {
+        this.gameState = gameState;
+    }
+
+    public void render() {
         batch.begin();
 
         drawBackground();
@@ -65,6 +73,9 @@ public class View {
         int currentX = (windowWidth - cards.length * 70) / 2;
         int currentY = playerId == currentPlayerId ? windowHeight - 250 : windowHeight - 330;
         for (Card card : cards) {
+            if (card == null)
+                break;
+
             String cardName = card.getValue() + card.getSuit().shortName() + ".gif";
             batch.draw(textures.get(cardName), currentX, currentY);
             currentX += 70;

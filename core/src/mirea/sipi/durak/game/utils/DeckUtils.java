@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class DeckUtils {
-    private static final int INITIAL_HAND_SIZE = 6;
+    public static final int INITIAL_HAND_SIZE = 6;
 
     private static final int START_CARD_VALUE = 6;
     private static final int FINAL_CARD_VALUE = 14;

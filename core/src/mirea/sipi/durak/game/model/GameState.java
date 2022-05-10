@@ -1,5 +1,7 @@
 package mirea.sipi.durak.game.model;
 
+import mirea.sipi.durak.game.utils.DeckUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -9,15 +11,17 @@ public class GameState {
     /**
      * Класс для описания игрового поля
      */
-    public static class Table {
+    public class Table {
+        private final int MAX_ATTACKERS = 6;
+
         /**
          * "Атакующие" карты
          */
-        public Card[] attackers;
+        public Card[] attackers = new Card[MAX_ATTACKERS];
         /**
          * Карты, которыми отбиваются от атаки
          */
-        public Card[] defenders;
+        public Card[] defenders = new Card[MAX_ATTACKERS];
     }
 
     /**
@@ -61,4 +65,33 @@ public class GameState {
      * Статус пасования игроков
      */
     public boolean[] playerPass;
+
+    /**
+     * Список победивших игроков
+     */
+    public ArrayList<Integer> winners;
+
+    public GameState(int playerCount) {
+        this.playerCount = playerCount;
+
+        deck = DeckUtils.createFullDeck();
+        discard = new ArrayList<>();
+        hands = DeckUtils.createStartHands(deck);
+        table = new Table();
+        trumpSuit = deck.get(0).getSuit();
+        playerPass = new boolean[playerCount];
+        winners = new ArrayList<>();
+    }
+
+    /**
+     * Вспомогательный метод, с помощью которого можно узнать, спасовали ли все игроки
+     * @return
+     */
+    public boolean getAllPass() {
+        for (boolean pass : playerPass) {
+            if (!pass)
+                return false;
+        }
+        return true;
+    }
 }

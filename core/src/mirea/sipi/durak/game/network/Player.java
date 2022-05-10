@@ -13,7 +13,7 @@ public abstract class Player {
     /**
      * Отображение партии
      */
-    private View view;
+    public View view;
     /**
      * Текущее игровое состояние, сохранённое у игрока
      */
@@ -25,6 +25,8 @@ public abstract class Player {
 
     public Player(int playerID) {
         this.playerID = playerID;
+
+        view = new View(playerID);
     }
 
     /**
