@@ -36,7 +36,7 @@ public abstract class Player {
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
 
-        view.draw(gameState);
+        view.update(gameState);
     }
 
     /**

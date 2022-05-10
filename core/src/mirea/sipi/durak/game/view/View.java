@@ -1,55 +1,47 @@
 package mirea.sipi.durak.game.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
 import mirea.sipi.durak.game.model.Card;
 import mirea.sipi.durak.game.model.GameState;
-import mirea.sipi.durak.game.utils.DeckUtils;
+import mirea.sipi.durak.game.utils.FileUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Класс отображения партии
  */
 public class View {
+    private static final String ASSETS_DIRECTORY_PATH = "assets";
 
-    private List<Texture> textures;
-    private SpriteBatch batch;
-    private GameState gameState;
+    private final Map<String, Texture> textures;
 
-    private boolean viewUpdated;
+    private final SpriteBatch batch;
+    private final int currentPlayerId;
 
-    private int windowHeight;
-    private int windowWidth;
+    private final int windowHeight;
+    private final int windowWidth;
 
-	/**
-	 * Отрисовывает текущее состояние игры
-	 * @param gameState Текущее состояние игры
-	 */
-    public void draw(GameState gameState) {
-        windowHeight =  Gdx.graphics.getHeight();
-        windowWidth = Gdx.graphics.getWidth();
-        batch = new SpriteBatch();
+    public View(int currentPlayerId) {
+        this.windowHeight = Gdx.graphics.getHeight();
+        this.windowWidth = Gdx.graphics.getWidth();
+        this.batch = new SpriteBatch();
+        this.currentPlayerId = currentPlayerId;
+        this.textures = new HashMap<>();
 
-        textures = new ArrayList<>();
-        this.gameState = gameState;
-
-        viewUpdated = true;
+        FileUtils.walk(ASSETS_DIRECTORY_PATH, textures);
     }
 
-    public void render() {
-        if(!viewUpdated){
-            return;
-        }
-        ScreenUtils.clear(1, 0, 0, 1);
-
+    /**
+     * Отрисовывает текущее состояние игры
+     *
+     * @param gameState Текущее состояние игры
+     */
+    public void update(GameState gameState) {
         batch.begin();
-        System.out.println(textures.size());
 
         drawBackground();
 
@@ -60,68 +52,56 @@ public class View {
         drawTableCards(gameState.table.attackers, 1);
 
         drawDiscard();
-        drawTrumpSuit();
+        drawTrumpSuit(gameState.trumpSuit);
 
         batch.end();
-        viewUpdated = false;
     }
 
     private void drawBackground() {
-        Texture t = new Texture(Gdx.files.internal("table.jpg"));
-        batch.draw(t, 0, 0);
+        batch.draw(textures.get("table.jpg"), 0, 0);
     }
 
     private void drawTableCards(Card[] cards, int playerId) {
-        int currentX = (windowWidth - gameState.table.defenders.length * 70) / 2;
-        int currentY = playerId == 0 ? windowHeight - 250 : windowHeight - 330;
-        for(Card card : cards){
-            String cardName = card.getValue() + card.getSuit().shortName();
-            Texture tex = new Texture(Gdx.files.internal("cards/" + cardName + ".gif"));
-            batch.draw(tex, currentX, currentY);
-            currentX+=70;
-
+        int currentX = (windowWidth - cards.length * 70) / 2;
+        int currentY = playerId == currentPlayerId ? windowHeight - 250 : windowHeight - 330;
+        for (Card card : cards) {
+            String cardName = card.getValue() + card.getSuit().shortName() + ".gif";
+            batch.draw(textures.get(cardName), currentX, currentY);
+            currentX += 70;
         }
     }
 
-    private void drawPlayerCards(ArrayList<Card> hand, int playerId){
-        int currentX = (windowWidth - gameState.hands[0].size() * 30) / 2;
-        int currentY = playerId == 0 ? 10 : windowHeight - 110;
-        for(Card card : gameState.hands[playerId]){
+    private void drawPlayerCards(ArrayList<Card> hand, int playerId) {
+        int currentX = (windowWidth - hand.size() * 30) / 2;
+        int currentY = playerId == currentPlayerId ? 10 : windowHeight - 110;
+        for (Card card : hand) {
             Texture tex;
-            if(playerId == 0){
-                String cardName = card.getValue() + card.getSuit().shortName();
-                tex = new Texture(Gdx.files.internal("cards/" + cardName + ".gif"));
-            }
-            else {
-                tex = new Texture(Gdx.files.internal("cards/back.gif"));
+            if (playerId == currentPlayerId) {
+                String cardName = card.getValue() + card.getSuit().shortName() + ".gif";
+                tex = textures.get(cardName);
+            } else {
+                tex = textures.get("back.gif");
             }
 
             batch.draw(tex, currentX, currentY);
-            currentX+=30;
-
+            currentX += 30;
         }
     }
 
-    private void drawDiscard(){
+    private void drawDiscard() {
         int currentX = windowWidth - 80;
         int currentY = (windowHeight - 97) / 2;
-        Texture tex = new Texture(Gdx.files.internal("cards/back.gif"));
-        batch.draw(tex, currentX, currentY);
+        batch.draw(textures.get("back.gif"), currentX, currentY);
     }
 
-    private void drawTrumpSuit(){
+    private void drawTrumpSuit(Card.Suit trumpSuit) {
         int currentX = 10;
         int currentY = (windowHeight - 97) / 2;
-        String cardName = gameState.trumpSuit.shortName();
-        Texture tex = new Texture(Gdx.files.internal("suits/" + cardName +".png"));
-        batch.draw(tex, currentX, currentY);
+        String cardName = trumpSuit.shortName() + ".png";
+        batch.draw(textures.get(cardName), currentX, currentY);
     }
 
-
-    public void dispose () {
-        for(Texture texture : textures){
-            texture.dispose();
-        }
+    public void dispose() {
         batch.dispose();
     }
 }
