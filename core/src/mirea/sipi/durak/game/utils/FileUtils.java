@@ -7,10 +7,15 @@ import java.io.File;
 import java.util.Map;
 
 public class FileUtils {
-    public static void walk(String path, Map<String, Texture> textures) {
+    public static void walk(Map<String, Texture> textures) {
+        walk("./", textures);
+    }
+
+    private static void walk(String path, Map<String, Texture> textures) {
         File root = new File(path);
         File[] list = root.listFiles();
 
+        String fullRoot = root.getAbsolutePath();
         if (list == null) return;
 
         for (File f : list) {
