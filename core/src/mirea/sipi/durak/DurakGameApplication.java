@@ -41,6 +41,5 @@ public class DurakGameApplication extends ApplicationAdapter {
 
 	@Override
 	public void dispose () {
-		batch.dispose();
 	}
 }

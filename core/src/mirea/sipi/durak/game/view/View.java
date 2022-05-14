@@ -17,8 +17,6 @@ import java.util.Map;
  * Класс отображения партии
  */
 public class View {
-    private static final String ASSETS_DIRECTORY_PATH = "assets";
-
     private final Map<String, Texture> textures;
 
     private final SpriteBatch batch;
@@ -36,7 +34,7 @@ public class View {
         this.currentPlayerId = currentPlayerId;
         this.textures = new HashMap<>();
 
-        FileUtils.walk(ASSETS_DIRECTORY_PATH, textures);
+        FileUtils.walk(textures);
     }
 
     /**
