@@ -10,6 +10,7 @@ import mirea.sipi.durak.game.model.GameState;
 public class RotateCommand extends Command{
     private Card rotationCard;
 
+    public RotateCommand() {}
     public RotateCommand(int playerID, Card rotationCard) {
         super(playerID);
         this.rotationCard = rotationCard;
@@ -31,7 +32,12 @@ public class RotateCommand extends Command{
      */
     @Override
     public void execute(Controller controller) {
-        if (controller.addAttacker(playerID, rotationCard))
+        if (controller.gameState.playerPass[playerID] || playerID != controller.gameState.defenderPlayerID)
+            return;
+
+        if (controller.addAttacker(playerID, rotationCard)) {
             controller.rotateTurn();
+            controller.gameState.resetAllPass();
+        }
     }
 }

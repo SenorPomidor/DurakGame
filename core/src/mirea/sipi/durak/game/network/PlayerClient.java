@@ -24,12 +24,22 @@ public class PlayerClient extends Player {
         client = new Client();
         client.start();
         // TODO: Заменить локалхост на айпи хоста
-        client.connect(5000, "127.0.0.1", 54555, 54777);
+        new Thread()
+        {
+            @Override
+            public void run() {
+                try {
+                    client.connect(10000, "localhost", 54555, 54777);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
 
         client.addListener(new Listener() {
             public void received (Connection connection, Object object) {
                 if (object instanceof GameState) {
-                    gameState = (GameState)object;
+                    setGameState((GameState)object);
                 }
             }
         });
@@ -43,6 +53,6 @@ public class PlayerClient extends Player {
      */
     @Override
     public void makeTurn(Command command) {
-        client.sendTCP(command);
+        client.sendUDP(command);
     }
 }

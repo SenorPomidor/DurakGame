@@ -1,5 +1,6 @@
 package mirea.sipi.durak.game.model;
 
+import com.badlogic.gdx.Game;
 import mirea.sipi.durak.game.utils.DeckUtils;
 
 import java.util.ArrayList;
@@ -8,22 +9,6 @@ import java.util.ArrayList;
  * Игровое состояние
  */
 public class GameState {
-    /**
-     * Класс для описания игрового поля
-     */
-    public class Table {
-        private final int MAX_ATTACKERS = 6;
-
-        /**
-         * "Атакующие" карты
-         */
-        public Card[] attackers = new Card[MAX_ATTACKERS];
-        /**
-         * Карты, которыми отбиваются от атаки
-         */
-        public Card[] defenders = new Card[MAX_ATTACKERS];
-    }
-
     /**
      * Игровая колода карт
      */
@@ -71,6 +56,10 @@ public class GameState {
      */
     public ArrayList<Integer> winners;
 
+    public GameState() {
+
+    }
+
     public GameState(int playerCount) {
         this.playerCount = playerCount;
 
@@ -93,5 +82,10 @@ public class GameState {
                 return false;
         }
         return true;
+    }
+
+    public void resetAllPass() {
+        for (int i = 0; i < playerPass.length; i++)
+            playerPass[i] = false;
     }
 }

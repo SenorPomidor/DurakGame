@@ -1,5 +1,7 @@
 package mirea.sipi.durak.game.model;
 
+import java.util.Objects;
+
 /**
  * Класс игровой карты
  */
@@ -30,6 +32,10 @@ public class Card {
      */
     private int value;
 
+    public Card() {
+
+    }
+
     public Card(Suit suit, int value) {
         this.suit = suit;
         this.value = value;
@@ -41,5 +47,18 @@ public class Card {
 
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return value == card.value && suit == card.suit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(suit, value);
     }
 }

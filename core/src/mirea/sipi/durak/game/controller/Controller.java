@@ -17,6 +17,10 @@ public class Controller {
      */
     public GameState gameState;
 
+    public Controller(GameState gameState) {
+        this.gameState = gameState;
+    }
+
     /**
      * Выполняет переданную команду
      * @param command Команда, которую необходимо выполнить
@@ -40,6 +44,9 @@ public class Controller {
      */
     public boolean addAttacker(int playerID, Card attacker) {
         if (gameState.table.attackers[0] != null && !checkForAttack(attacker))
+            return false;
+
+        if (gameState.table.attackers[0] == null && playerID != gameState.attackerPlayerID)
             return false;
 
         Card[] attackers = gameState.table.attackers;
