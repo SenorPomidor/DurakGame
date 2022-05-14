@@ -13,6 +13,7 @@ public class AttackCommand extends Command {
      */
     private Card attacker;
 
+    public AttackCommand() {}
     public AttackCommand(int playerID, Card attacker) {
         super(playerID);
         this.attacker = attacker;
@@ -38,11 +39,15 @@ public class AttackCommand extends Command {
 
         int activePlayer = gameState.attackerPlayerID;
 
+        if (gameState.playerPass[playerID])
+            return;
+
         if (playerID != activePlayer) {
-            if (!gameState.playerPass[activePlayer] || gameState.playerPass[playerID])
+            if (!gameState.playerPass[activePlayer])
                 return;
         }
 
         controller.addAttacker(playerID, attacker);
+        gameState.resetAllPass();
     }
 }

@@ -1,10 +1,13 @@
 package mirea.sipi.durak.game.network;
 
 import com.esotericsoftware.kryo.Kryo;
-import mirea.sipi.durak.game.commands.Command;
+import mirea.sipi.durak.game.commands.*;
 import mirea.sipi.durak.game.model.Card;
 import mirea.sipi.durak.game.model.GameState;
+import mirea.sipi.durak.game.model.Table;
 import mirea.sipi.durak.game.view.View;
+
+import java.util.ArrayList;
 
 /**
  * Класс для описания игрока партии
@@ -25,6 +28,7 @@ public abstract class Player {
 
     public Player(int playerID) {
         this.playerID = playerID;
+        CommandSender.initialize(this);
 
         view = new View(playerID);
     }
@@ -37,6 +41,7 @@ public abstract class Player {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
+        CommandSender.isDefender = gameState.defenderPlayerID == playerID;
 
         view.update(gameState);
     }
@@ -49,5 +54,19 @@ public abstract class Player {
         kryo.register(Card.class);
         kryo.register(GameState.class);
         kryo.register(Command.class);
+        kryo.register(ArrayList.class);
+        kryo.register(Card.Suit.class);
+        kryo.register(Table.class);
+        kryo.register(ArrayList[].class);
+        kryo.register(boolean[].class);
+        kryo.register(Card[].class);
+        kryo.register(AttackCommand.class);
+        kryo.register(DefendCommand.class);
+        kryo.register(RotateCommand.class);
+        kryo.register(PassCommand.class);
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
 }
