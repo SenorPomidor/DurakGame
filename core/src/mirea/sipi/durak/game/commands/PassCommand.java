@@ -7,6 +7,7 @@ import mirea.sipi.durak.game.model.GameState;
  * Команда паса
  */
 public class PassCommand extends Command{
+    public PassCommand() {}
     public PassCommand(int playerID) {
         super(playerID);
     }

@@ -5,6 +5,7 @@ import mirea.sipi.durak.game.controller.Controller;
 import mirea.sipi.durak.game.model.GameState;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Класс команды
@@ -15,6 +16,7 @@ public abstract class Command {
      */
     protected int playerID;
 
+    public Command() {}
     public Command(int playerID) {
         this.playerID = playerID;
     }

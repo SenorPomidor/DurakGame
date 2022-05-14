@@ -1,8 +1,10 @@
 package mirea.sipi.durak.game.commands;
 
+import com.badlogic.gdx.Game;
 import mirea.sipi.durak.game.model.Card;
 import mirea.sipi.durak.game.controller.Controller;
 import mirea.sipi.durak.game.model.GameState;
+import mirea.sipi.durak.game.model.Table;
 
 /**
  * Команда, отправляемая защищающимся игроком, чтобы отбиться от атакующих карт
@@ -11,6 +13,7 @@ public class DefendCommand extends Command {
     private Card defender;
     private Card attacker;
 
+    public DefendCommand() {}
     public DefendCommand(int playerID, Card defender, Card attacker) {
         super(playerID);
         this.defender = defender;
@@ -35,11 +38,13 @@ public class DefendCommand extends Command {
     public void execute(Controller controller) {
         GameState gameState = controller.gameState;
 
-        if (gameState.defenderPlayerID != playerID)
+        if (gameState.playerPass[playerID] || gameState.defenderPlayerID != playerID || isAttackerDefended(gameState.table, attacker))
             return;
 
-        if (checkDefence(defender, attacker, gameState.trumpSuit))
+        if (checkDefence(defender, attacker, gameState.trumpSuit)) {
             controller.addDefender(playerID, defender, attacker);
+            gameState.resetAllPass();
+        }
     }
 
     /**
@@ -53,5 +58,17 @@ public class DefendCommand extends Command {
         if (defender.getSuit() == attacker.getSuit())
             return defender.getValue() > attacker.getValue();
         return defender.getSuit() == trump;
+    }
+
+    private boolean isAttackerDefended(Table table, Card attacker) {
+        for (int i = 0; i < table.attackers.length; i++) {
+            if (table.attackers[i] == null)
+                break;
+
+            if (table.attackers[i].equals(attacker))
+                return table.defenders[i] != null;
+        }
+
+        return true;
     }
 }

@@ -39,6 +39,11 @@ public class Host extends Player {
                     makeTurn(request);
                 }
             }
+
+            @Override
+            public void connected(Connection connection) {
+                server.sendToAllTCP(gameState);
+            }
         });
 
         registerClasses(server.getKryo());
@@ -46,6 +51,7 @@ public class Host extends Player {
 
     public void startGame(int playerCount) {
         setGameState(new GameState(playerCount));
+        controller = new Controller(gameState);
     }
 
     /**

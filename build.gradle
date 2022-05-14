@@ -28,6 +28,10 @@ allprojects {
         gdxControllersVersion = '2.2.1'
     }
 
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+    }
+
     repositories {
         mavenLocal()
         mavenCentral()
