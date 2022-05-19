@@ -2,51 +2,93 @@ package mirea.sipi.durak;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.esotericsoftware.kryonet.Client;
 import mirea.sipi.durak.game.network.Host;
 import mirea.sipi.durak.game.network.PlayerClient;
+import mirea.sipi.durak.game.view.Lobby;
+import mirea.sipi.durak.game.view.MainMenu;
+import mirea.sipi.durak.game.view.WelcomeMenu;
 import mirea.sipi.durak.game.view.View;
 
 import java.io.IOException;
 
 public class DurakGameApplication extends ApplicationAdapter {
 	private SpriteBatch batch;
-	View view;
-	Stage stage;
+	private View view;
+	private Stage stage;
+	private WelcomeMenu welcomeMenu;
+	private MainMenu mainMenu;
+	private Lobby lobby;
+	private Host host;
 
-	boolean gameCreated = false;
+	private boolean isInWelcomeMenu = true;
+	private boolean isInMainMenu = false;
+
+	private boolean isHostGameCreated = false;
+	private boolean isClientGameCreated = false;
 
 	@Override
 	public void create () {
-
+		this.welcomeMenu = new WelcomeMenu();
 	}
 
 	@Override
 	public void render () {
-		if (gameCreated) {
-			if (view.getReady())
-				view.render();
+		if (isInWelcomeMenu) {
+			welcomeMenu.render();
+			stage = welcomeMenu.getStage();
+
+			if (welcomeMenu.getUsername() != null){
+				isInWelcomeMenu = false;
+				isInMainMenu = true;
+				this.mainMenu = new MainMenu(welcomeMenu.getUsername());
+			}
+			return;
 		}
 
-		if (!gameCreated) {
-			if (Gdx.input.isKeyJustPressed(Input.Keys.A))
-				createHostGame();
-			if (Gdx.input.isKeyJustPressed(Input.Keys.D))
-				createClientGame();
+		if(isInMainMenu){
+			mainMenu.render();
+			stage = mainMenu.getStage();
+
+			if(mainMenu.getCommand() != null){
+				isInMainMenu = false;
+				switch (mainMenu.getCommand()){
+					case "Change username":
+						isInWelcomeMenu = true;
+						welcomeMenu = new WelcomeMenu();
+						return;
+					case "Create game":
+						createHostGame();
+						break;
+					case "Enter game":
+						createClientGame();
+				}
+				String player = mainMenu.getCommand().equals("Create game") ? "Host" : "Client";
+				this.lobby = new Lobby(player);
+			}
+			return;
+		}
+
+		if (isHostGameCreated && isClientGameCreated) {
+			if (view.getReady()){
+				view.render();
+			}
+			return;
+		}
+
+		if(isHostGameCreated){
+			lobby.render();
+			if(host.isClientConnected()){
+				isClientGameCreated = true;
+			}
 		}
 	}
 
 	@Override
-	public void dispose () {
-	}
+	public void dispose () {}
 
 	private void createHostGame() {
-		Host host = null;
-
 		try {
 			host = new Host(0);
 		} catch (IOException e) {
@@ -60,7 +102,7 @@ public class DurakGameApplication extends ApplicationAdapter {
 
 		Gdx.input.setInputProcessor(stage);
 
-		gameCreated = true;
+		isHostGameCreated = true;
 	}
 
 	private void createClientGame() {
@@ -77,6 +119,7 @@ public class DurakGameApplication extends ApplicationAdapter {
 
 		Gdx.input.setInputProcessor(stage);
 
-		gameCreated = true;
+		isClientGameCreated = true;
+		isHostGameCreated = true;
 	}
 }
