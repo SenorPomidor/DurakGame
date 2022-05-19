@@ -150,7 +150,6 @@ public class View {
         int currentX = (windowWidth - hand.size() * 30) / 2;
         int currentY = playerId == currentPlayerId ? 10 : windowHeight - 110;
         for (final Card card : hand) {
-            Texture tex;
             if (playerId == currentPlayerId) {
                 String cardName = card.getValue() + card.getSuit().shortName() + ".gif";
                 Button cardButton = new Button(new TextureRegionDrawable(textures.get(cardName)));
