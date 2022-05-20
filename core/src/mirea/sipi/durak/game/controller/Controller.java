@@ -262,4 +262,15 @@ public class Controller {
     private void endGame() {
         // TODO: Добавить логику окончания игры
     }
+
+    public void addChatMessage(String message) {
+        if(gameState.chatHistory.size() > 15){
+            gameState.chatHistory.remove(0);
+        }
+        gameState.chatHistory.add(message);
+    }
+
+    public void setReady(int playerId) {
+        gameState.ready[playerId] = true;
+    }
 }

@@ -48,4 +48,12 @@ public class CommandSender {
         Command command = new PassCommand(playerID);
         player.makeTurn(command);
     }
+
+    public static void sendChatClick(String message){
+        player.makeTurn(new SendChatCommand(message));
+    }
+
+    public static void sendReadyClick(int index){
+        player.makeTurn(new ReadyCommand(index));
+    }
 }

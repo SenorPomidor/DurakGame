@@ -23,6 +23,8 @@ public class Host extends Player {
      */
     private Server server;
 
+    private boolean isClientConnected;
+
     public Host(int playerID) throws IOException {
         super(playerID);
 
@@ -43,6 +45,7 @@ public class Host extends Player {
             @Override
             public void connected(Connection connection) {
                 server.sendToAllTCP(gameState);
+                isClientConnected = true;
             }
         });
 
@@ -72,5 +75,9 @@ public class Host extends Player {
         super.setGameState(gameState);
 
         server.sendToAllTCP(gameState);
+    }
+
+    public boolean isClientConnected() {
+        return isClientConnected;
     }
 }

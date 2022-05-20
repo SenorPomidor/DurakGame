@@ -17,7 +17,9 @@ public class PlayerClient extends Player {
      */
     private Client client;
 
-    public PlayerClient(int playerID) throws IOException {
+    public boolean isConnected = true;
+
+    public PlayerClient(int playerID){
         super(playerID);
 
         // TODO: Вероятно потом создание клиента стоит перенести куда-то ещё, он ведь понадобится для создания лобби
@@ -29,8 +31,9 @@ public class PlayerClient extends Player {
             @Override
             public void run() {
                 try {
-                    client.connect(10000, "localhost", 54555, 54777);
+                    client.connect(2000, "localhost", 54555, 54777);
                 } catch (IOException e) {
+                    isConnected = false;
                     e.printStackTrace();
                 }
             }
@@ -45,6 +48,12 @@ public class PlayerClient extends Player {
         });
 
         registerClasses(client.getKryo());
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

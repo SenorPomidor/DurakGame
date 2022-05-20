@@ -20,7 +20,7 @@ public abstract class Player {
     /**
      * Текущее игровое состояние, сохранённое у игрока
      */
-    protected GameState gameState;
+    public GameState gameState;
     /**
      * Номер игрока в партии
      */
@@ -64,6 +64,8 @@ public abstract class Player {
         kryo.register(DefendCommand.class);
         kryo.register(RotateCommand.class);
         kryo.register(PassCommand.class);
+        kryo.register(SendChatCommand.class);
+        kryo.register(ReadyCommand.class);
     }
 
     public int getPlayerID() {

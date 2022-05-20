@@ -23,7 +23,9 @@ public class FileUtils {
                 walk(f.getAbsolutePath(), textures);
             }
             else {
-                textures.put(f.getName(), new Texture(Gdx.files.internal(f.getAbsolutePath())));
+                if(f.getName().matches("\\w+\\.(jpeg|jpg|png|gif)")){
+                    textures.put(f.getName(), new Texture(Gdx.files.internal(f.getAbsolutePath())));
+                }
             }
         }
     }
