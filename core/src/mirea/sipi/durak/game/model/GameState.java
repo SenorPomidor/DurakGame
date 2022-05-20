@@ -28,6 +28,11 @@ public class GameState {
     public Table table;
 
     /**
+     * Сообщения, отправленные в чат
+     */
+    public ArrayList<String> chatHistory;
+
+    /**
      * Количество игроков в партии
      */
     public int playerCount;
@@ -56,6 +61,11 @@ public class GameState {
      */
     public ArrayList<Integer> winners;
 
+    /**
+     * Готовность игроков к игре
+     */
+    public boolean[] ready;
+
     public GameState() {
 
     }
@@ -70,6 +80,8 @@ public class GameState {
         trumpSuit = deck.get(0).getSuit();
         playerPass = new boolean[playerCount];
         winners = new ArrayList<>();
+        chatHistory = new ArrayList<>();
+        ready = new boolean[2];
     }
 
     /**

@@ -18,25 +18,27 @@ import java.util.Map;
 public class WelcomeMenu {
     public static final Skin UI_SKIN = new Skin(Gdx.files.internal("./data/uiskin.json"));
 
-    private final Map<String, Texture> textures;
+    public static String currentBackground = "default_back.jpeg";
+
+    public static String username;
+
+    public static Map<String, Texture> textures = new HashMap<>();
     private final SpriteBatch batch;
     private final Stage stage;
 
     private final TextField textField;
 
-    private String username;
-
     public WelcomeMenu() {
         int windowHeight = Gdx.graphics.getHeight();
         int windowWidth = Gdx.graphics.getWidth();
         this.batch = new SpriteBatch();
-        this.textures = new HashMap<>();
         this.stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
         textField = new TextField("Enter username", UI_SKIN);
         textField.setPosition(windowWidth /2.0f-100, windowHeight /2.0f);
         textField.setSize(200, 40);
+        textField.setMaxLength(8);
 
         TextButton textButton = new TextButton("Enter", UI_SKIN);
         textButton.setPosition(windowWidth /2.0f+120, windowHeight /2.0f);
@@ -49,8 +51,21 @@ public class WelcomeMenu {
             }
         });
 
+        TextButton exitButton = new TextButton("Exit", UI_SKIN);
+        exitButton.setPosition(windowWidth /2.0f-40, windowHeight /2.0f - 200);
+        exitButton.setSize(80, 40);
+
+        exitButton.addListener(new ClickListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
+
         stage.addActor(textField);
         stage.addActor(textButton);
+        stage.addActor(exitButton);
 
         FileUtils.walk(textures);
     }
@@ -63,16 +78,12 @@ public class WelcomeMenu {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void render(){
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        batch.draw(textures.get("menu_back.jpeg"), 0, 0);
+        batch.draw(textures.get(currentBackground), 0, 0);
         batch.end();
 
         stage.draw();

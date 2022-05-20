@@ -4,122 +4,156 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import mirea.sipi.durak.game.network.Host;
 import mirea.sipi.durak.game.network.PlayerClient;
-import mirea.sipi.durak.game.view.Lobby;
-import mirea.sipi.durak.game.view.MainMenu;
-import mirea.sipi.durak.game.view.WelcomeMenu;
-import mirea.sipi.durak.game.view.View;
+import mirea.sipi.durak.game.view.*;
 
 import java.io.IOException;
 
+import static mirea.sipi.durak.game.view.MainMenu.isConnectionRefused;
+
 public class DurakGameApplication extends ApplicationAdapter {
-	private SpriteBatch batch;
-	private View view;
-	private Stage stage;
-	private WelcomeMenu welcomeMenu;
-	private MainMenu mainMenu;
-	private Lobby lobby;
-	private Host host;
+    private SpriteBatch batch;
+    private View view;
+    private Stage stage;
+    private WelcomeMenu welcomeMenu;
+    private MainMenu mainMenu;
+    private Lobby lobby;
+    private Settings settings;
+    private Host host;
+    private PlayerClient client;
 
-	private boolean isInWelcomeMenu = true;
-	private boolean isInMainMenu = false;
+    private boolean isInWelcomeMenu = true;
+    private boolean isInMainMenu = false;
+    private boolean isInSettings = false;
 
-	private boolean isHostGameCreated = false;
-	private boolean isClientGameCreated = false;
+    private boolean isHostGameCreated = false;
+    private boolean isClientGameCreated = false;
 
-	@Override
-	public void create () {
-		this.welcomeMenu = new WelcomeMenu();
-	}
+    @Override
+    public void create() {
+        this.welcomeMenu = new WelcomeMenu();
+    }
 
-	@Override
-	public void render () {
-		if (isInWelcomeMenu) {
-			welcomeMenu.render();
-			stage = welcomeMenu.getStage();
+    @Override
+    public void render() {
+        if (isInWelcomeMenu) {
+            welcomeMenu.render();
+            stage = welcomeMenu.getStage();
 
-			if (welcomeMenu.getUsername() != null){
-				isInWelcomeMenu = false;
-				isInMainMenu = true;
-				this.mainMenu = new MainMenu(welcomeMenu.getUsername());
-			}
-			return;
-		}
+            if (welcomeMenu.getUsername() != null) {
+                isInWelcomeMenu = false;
+                isInMainMenu = true;
+                this.mainMenu = new MainMenu(welcomeMenu.getUsername());
+            }
 
-		if(isInMainMenu){
-			mainMenu.render();
-			stage = mainMenu.getStage();
+            isConnectionRefused = false;
+            return;
+        }
 
-			if(mainMenu.getCommand() != null){
-				isInMainMenu = false;
-				switch (mainMenu.getCommand()){
-					case "Change username":
-						isInWelcomeMenu = true;
-						welcomeMenu = new WelcomeMenu();
-						return;
-					case "Create game":
-						createHostGame();
-						break;
-					case "Enter game":
-						createClientGame();
-				}
-				String player = mainMenu.getCommand().equals("Create game") ? "Host" : "Client";
-				this.lobby = new Lobby(player);
-			}
-			return;
-		}
+        if (isInMainMenu) {
+            mainMenu.render();
+            stage = mainMenu.getStage();
 
-		if (isHostGameCreated && isClientGameCreated) {
-			if (view.getReady()){
-				view.render();
-			}
-			return;
-		}
+            if (mainMenu.getCommand() != null) {
+                String command = mainMenu.getCommand();
+                mainMenu.setCommand(null);
+                isInMainMenu = false;
+                switch (command) {
+                    case "Change username":
+                        isInWelcomeMenu = true;
+                        WelcomeMenu.username = null;
+                        welcomeMenu = new WelcomeMenu();
+                        return;
+                    case "Settings":
+                        isInSettings = true;
+                        settings = new Settings();
+                        return;
+                    case "Create game":
+                        createHostGame();
+                        break;
+                    case "Enter game":
+                        createClientGame();
+                }
+                String player = command.equals("Create game") ? "Host" : "Client";
+                this.lobby = new Lobby(player);
+            }
+            return;
+        }
 
-		if(isHostGameCreated){
-			lobby.render();
-			if(host.isClientConnected()){
-				isClientGameCreated = true;
-			}
-		}
-	}
+        if (isInSettings) {
+            settings.render();
+            stage = settings.getStage();
 
-	@Override
-	public void dispose () {}
+            if (settings.getCommand() != null) {
+                settings.setCommand(null);
+                isInSettings = false;
+                isInMainMenu = true;
+            }
 
-	private void createHostGame() {
-		try {
-			host = new Host(0);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            isConnectionRefused = false;
+            return;
+        }
 
-		host.startGame(2);
+        if (host != null && host.gameState.ready[0] && host.gameState.ready[1]
+                || client != null && client.gameState.ready[0] && client.gameState.ready[1]) {
+            if (view.getReady()) {
+                view.render();
+            }
 
-		view = host.view;
-		stage = view.getStage();
+            return;
+        }
 
-		Gdx.input.setInputProcessor(stage);
+        if (isHostGameCreated && isClientGameCreated) {
+            lobby.renderReadyScreen();
+            return;
+        }
 
-		isHostGameCreated = true;
-	}
+        if (isHostGameCreated) {
+            lobby.renderWaitingScreen();
+            if (host.isClientConnected()) {
+                isClientGameCreated = true;
+            }
+        }
+    }
 
-	private void createClientGame() {
-		PlayerClient client = null;
+    @Override
+    public void dispose() {
+    }
 
-		try {
-			client = new PlayerClient(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    private void createHostGame() {
+        try {
+            host = new Host(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		view = client.view;
-		stage = view.getStage();
+        host.startGame(2);
 
-		Gdx.input.setInputProcessor(stage);
+        view = host.view;
+        stage = view.getStage();
 
-		isClientGameCreated = true;
-		isHostGameCreated = true;
-	}
+        Gdx.input.setInputProcessor(stage);
+
+        isHostGameCreated = true;
+    }
+
+    private void createClientGame() {
+        client = new PlayerClient(1);
+
+        if (client.isConnected) {
+            view = client.view;
+            stage = view.getStage();
+
+            Gdx.input.setInputProcessor(stage);
+
+            isClientGameCreated = true;
+            isHostGameCreated = true;
+            isConnectionRefused = false;
+            return;
+        }
+        isInMainMenu = true;
+        isConnectionRefused = true;
+    }
 }
