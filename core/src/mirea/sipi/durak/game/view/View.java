@@ -89,6 +89,7 @@ public class View {
         updateChatHistory();
     }
     public void render() {
+        Gdx.input.setInputProcessor(stage);
         batch.begin();
 
         stage.draw();
